@@ -1,22 +1,30 @@
 package com.devdroid.pokedex_mvp.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devdroid.pokedex_mvp.R
+import com.devdroid.pokedex_mvp.data.CategoryRemoteDataSource
 import com.devdroid.pokedex_mvp.model.Category
+import com.devdroid.pokedex_mvp.model.PokemonType
+import com.devdroid.pokedex_mvp.model.PokemonTypeList
+import com.devdroid.pokedex_mvp.presentation.HomePresenter
 import com.xwray.groupie.GroupieAdapter
 
 class HomeFragment : Fragment() {
 
     private val adapter = GroupieAdapter()
+    lateinit var presenter: HomePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        presenter = HomePresenter(this)
     }
 
     override fun onCreateView(
@@ -35,8 +43,16 @@ class HomeFragment : Fragment() {
 
         recyclerView.adapter = adapter
 
-        adapter.add(CategoryItem(Category("cat1", 0xFFFF0000)))
-        adapter.add(CategoryItem(Category("cat2", 0xFFFF00DD)))
+        presenter.findAllCategories()
+
+    }
+
+    fun showCategories(response: List<Category>) {
+
+        val categories = response.map { CategoryItem(it) }
+        adapter.addAll(categories)
+        adapter.notifyDataSetChanged()
+
     }
 
 }
