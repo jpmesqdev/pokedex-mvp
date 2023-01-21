@@ -14,6 +14,7 @@ class HomePresenter(
 ) : ListCategoryCallback {
 
     fun findAllCategories() {
+        view.showProgress()
         dataSource.findAllCategories(this)
     }
 
@@ -36,13 +37,15 @@ class HomePresenter(
         }
 
         view.showCategories(categories)
+        onComplete()
     }
 
     override fun onError(message: String) {
         Log.i("moios", message)
+        onComplete()
     }
 
     override fun onComplete() {
-
+        view.hideProgress()
     }
 }

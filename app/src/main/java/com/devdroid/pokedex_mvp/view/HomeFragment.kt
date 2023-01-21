@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ class HomeFragment : Fragment() {
 
     private val adapter = GroupieAdapter()
     lateinit var presenter: HomePresenter
+    lateinit var progressbar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +42,9 @@ class HomeFragment : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rv_main)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
         recyclerView.adapter = adapter
 
+        progressbar = view.findViewById(R.id.progress_bar)
         presenter.findAllCategories()
 
     }
@@ -53,6 +55,14 @@ class HomeFragment : Fragment() {
         adapter.addAll(categories)
         adapter.notifyDataSetChanged()
 
+    }
+
+    fun showProgress() {
+        progressbar.visibility = View.VISIBLE
+    }
+
+    fun hideProgress() {
+        progressbar.visibility = View.GONE
     }
 
 }
